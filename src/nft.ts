@@ -1,7 +1,4 @@
-import { Data, NFT, NFTCreateFn, NFTHolder } from "./supporting";// const owners: NFTHolder[] = [["0xAB…CD", 2], …, ["0x12…34", 1]];
-
-// The Ethereum zero address
-export const ZeroAddress = "0x0000000000000000000000000000000000000000";
+import { Data, NFT, NFTCreateFn, NFTHolder, ZeroAddress } from "./supporting";
 
 const createFn: NFTCreateFn = (holders?: NFTHolder[]) => {
  class NewNFT implements NFT {
@@ -38,7 +35,7 @@ const createFn: NFTCreateFn = (holders?: NFTHolder[]) => {
             throw "Can't query for Zero Address"
         }
 
-        if (typeof ownerId !== 'string' || ownerId === undefined) { // check non-string or empty string
+        if (typeof ownerId !== 'string') { // check non-string
             throw 'Invalid owner Id'
         }
 
@@ -61,7 +58,7 @@ const createFn: NFTCreateFn = (holders?: NFTHolder[]) => {
         tokenId: number,
     ): void {
         // Checks
-        const currentOwner = this.ownerOf(tokenId); 
+        const currentOwner = this.ownerOf(tokenId);
         if (sender !== currentOwner || from !== currentOwner) {
             throw `Address not allowed to transfer asset ${tokenId}`
         }
@@ -70,21 +67,20 @@ const createFn: NFTCreateFn = (holders?: NFTHolder[]) => {
             throw "Can't send assets to Zero Address"
         }
 
-        // Swap asset
         const ownerAssets = this.data.get(currentOwner);
         const receiverAssets = this.data.get(to) || [];
-
+        
         const indexOfAsset = ownerAssets?.indexOf(tokenId);
         if (ownerAssets && indexOfAsset !== undefined && indexOfAsset >= 0){
-
+            // Swap
             ownerAssets.splice(indexOfAsset, 1); // Remove in-place
-            
             receiverAssets.push(tokenId)
             
             // Set data
             this.data.set(currentOwner, ownerAssets)
             this.data.set(to, receiverAssets)
 
+            // update walletAddressByNft
             this.walletAddressByNft.set(String(tokenId), to);
         }
     }

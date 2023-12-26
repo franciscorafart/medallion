@@ -34,6 +34,7 @@ export interface NFT {
 }
 
 export type Data = Map<string, number[]>
+
 // NFT holder definition, used in create function only
 export type NFTHolder = [string, number];
 

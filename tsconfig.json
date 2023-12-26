@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "sourceMap": false,
+    "allowJs": true,
+    "lib": ["ES2017", "DOM"],
+    "rootDir": "src",
+    "moduleResolution": "node"
+  }
+}
